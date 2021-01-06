@@ -24,8 +24,14 @@ let urlDB;
 if ( process.env.NODE_ENV === 'dev' ) {
     urlDB = 'ruta base de datos local';
 } else {
-    urlDB = 'ruta base de datos en la nube';
+    urlDB = process.env.MONGO_URI;
 }
 
 // esta es la variable global o de entorno que vamos a usar en la conexión process.env. esto es obligatorio lo que viene despues del punto lo editamos nosotros
 process.env.URLDB = urlDB;
+
+// A traves de heroku se pueden crear variables de entorno utilizando la consola
+// heroku config     ----- ves todas las variables de entorno
+// heroku config:set nombre="julio" creas una variable de entorno
+// heroku config:get nombre         obtienes el valor de la variable de entorno
+// heroku config:unset nombre       Eliminas la variable de entorno

@@ -1,7 +1,16 @@
 require('./config/config');
-const express = require('express')
+const express       = require('express')
+const mongoose      = require('mongoose');
+const bodyParser    = require('body-parser');
 const app = express()
-const bodyParser = require('body-parser');
+
+
+// usuario
+// node_js
+
+//contraseña
+// WIzpYNH6BVqTTWcK
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -9,37 +18,28 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
  
-app.get('/usuario', function (req, res) {
-  res.json('get usuario')
-});
+app.use( require('./routes/usuarios') );
 
-app.post('/usuario', function (req, res) {
-    let body = req.body;
+const dbConnection = async() => {
 
-    if (body.nombre === undefined) {
-        res.status(400).json({
-            ok: false,
-            msg: 'El nombre es obligatorio'
-        })
-    } else {
+    try {
+        await mongoose.connect('mongodb+srv://node_js:WIzpYNH6BVqTTWcK@cluster0.zmstm.mongodb.net/nodeServer', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+            useCreateIndex: true
+          });
         
-        res.status(200).json({
-            persona: body
-        });
+        console.log('Base de datos online julio');
+        
+    } catch (error) {
+        throw new Error();
     }
-});
 
-app.put('/usuario/:jeje', function (req, res) {
-    let id = req.params.jeje;
-    res.json({
-        id,
-        ok: true
-    })
-});
+};
 
-app.delete('/usuario', function (req, res) {
-    res.json('delete usuario')
-});
+dbConnection();
+
  
 app.listen(process.env.PORT, () => {
     console.log('Escuchando cambios en el puerto: ', process.env.PORT);

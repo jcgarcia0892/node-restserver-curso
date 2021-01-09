@@ -18,12 +18,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
  
-app.use( require('./routes/usuarios') );
+app.use(require('./routes/index.js'));
 
 const dbConnection = async() => {
-
+    console.log('hola',process.env.URLDB);
     try {
-        await mongoose.connect('mongodb+srv://node_js:WIzpYNH6BVqTTWcK@cluster0.zmstm.mongodb.net/nodeServer', {
+        await mongoose.connect(process.env.URLDB, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false,

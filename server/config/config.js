@@ -21,14 +21,30 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 let urlDB;
 
-if ( process.env.NODE_ENV === 'dev' ) {
-    urlDB = 'ruta base de datos local';
-} else {
-    urlDB = process.env.MONGO_URI;
-}
+// if ( process.env.NODE_ENV === 'dev' ) {
+//     urlDB = 'ruta base de datos local';
+// } else {
+// }
+urlDB = process.env.MONGO_URI;
+
+// ================
+// Vencimiento del token
+// ================
+
+    // 60 segundos
+    // 60 minutos
+    // 24 horas
+    // 30 dias
+    process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+
+// ================
+// SEED de autenticación
+// ================
+
+    process.env.SEED = process.env.SEED || 'este-es-mi-seed'
 
 // esta es la variable global o de entorno que vamos a usar en la conexión process.env. esto es obligatorio lo que viene despues del punto lo editamos nosotros
-process.env.URLDB = urlDB;
+process.env.URLDB = urlDB || 'mongodb+srv://node_js:WIzpYNH6BVqTTWcK@cluster0.zmstm.mongodb.net/nodeServer';
 
 // A traves de heroku se pueden crear variables de entorno utilizando la consola
 // heroku config     ----- ves todas las variables de entorno

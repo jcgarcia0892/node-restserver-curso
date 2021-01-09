@@ -3,8 +3,9 @@ const _         = require('underscore');
 const express   = require('express')
 const app       = express();
 const Usuario   = require('./../models/usuario');
+const { validarJWT, validarAdminRole } = require('../middlewares/auth');
 
-app.get('/usuario', function (req, res) {
+app.get('/usuario', validarJWT ,(req, res) => {
     
     // con el query buscas los paramentos que mandan en la url por ejemplo url?desde=12
     let desde = req.query.desde || 0;
@@ -20,7 +21,7 @@ app.get('/usuario', function (req, res) {
             .limit(limite)
             .exec((err, usuarios) => {
                 if (err) {
-                    return res.status(400).json({
+                    return res.status(500).json({
                         ok: false,
                         err
                     });
@@ -40,7 +41,7 @@ app.get('/usuario', function (req, res) {
 
   });
   
-  app.post('/usuario', function (req, res) {
+  app.post('/usuario', [validarJWT, validarAdminRole], (req, res) => {
     let body = req.body;
     
     const usuario = new Usuario({
@@ -53,7 +54,7 @@ app.get('/usuario', function (req, res) {
 
     usuario.save( (err, usuarioDB) => {
         if(err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });
@@ -66,7 +67,7 @@ app.get('/usuario', function (req, res) {
     
   });
   
-  app.put('/usuario/:id', function (req, res) {
+  app.put('/usuario/:id', [validarJWT, validarAdminRole], (req, res) => {
     // con el params obtienes los parametros que mandas despues de la url url/:parametro --- req.params.parametros
     let id = req.params.id;
     // _.pick() proviene de la libreria undescore el primer argumento es el objeto que se va a trabajar y lo segundo son las keys del objeto
@@ -76,9 +77,9 @@ app.get('/usuario', function (req, res) {
     // Primer argumento busqueda por id, segundo argumento la información que se va a cambiar
     // tercer argumento opciones a validar en este caso new te muestra en postman el cambio ya actualizado run validator aplica las validaciones hechas en el models
     // cuarto argumento callback con dos argumento el error y el usuario que hace match con la busqueda del id.
-    Usuario.findByIdAndUpdate(id, body, {new: true, runValidators: true}, (err, usuarioDB) => {
+    Usuario.findByIdAndUpdate(id, body, {new: true, runValidators: true, context: 'query'}, (err, usuarioDB) => {
         if(err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             })
@@ -94,12 +95,12 @@ app.get('/usuario', function (req, res) {
 
   });
   
-//   app.delete('/usuario/:id', function (req, res) {
+//   app.delete('/usuario/:id', (req, res) => {
 //     let id = req.params.id;
 //     Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
         
 //         if (err){
-//             returnres.status(400).json({
+//             returnres.status(500).json({
 //                 ok: false,
 //                 err
 //             });
@@ -121,14 +122,14 @@ app.get('/usuario', function (req, res) {
 //     });
 
 //   });
-  app.delete('/usuario/:id', function (req, res) {
+  app.delete('/usuario/:id', [validarJWT, validarAdminRole], (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'correo', 'img', 'role', 'estado']);
     let estadoInhabilitado = { estado: false };
     Usuario.findByIdAndUpdate(id, estadoInhabilitado, {new: true}, (err, usuarioBorrado) => {
         
         if (err){
-            returnres.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });

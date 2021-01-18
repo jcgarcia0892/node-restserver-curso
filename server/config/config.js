@@ -51,3 +51,9 @@ process.env.URLDB = urlDB || 'mongodb+srv://node_js:WIzpYNH6BVqTTWcK@cluster0.zm
 // heroku config:set nombre="julio" creas una variable de entorno
 // heroku config:get nombre         obtienes el valor de la variable de entorno
 // heroku config:unset nombre       Eliminas la variable de entorno
+
+// ================
+// Google ID
+// ================
+
+process.env.CLIENT_ID = process.env.CLIENT_ID || '497467225089-n8lu1b124ds0h1c95ees102lkqb49ibp.apps.googleusercontent.com';

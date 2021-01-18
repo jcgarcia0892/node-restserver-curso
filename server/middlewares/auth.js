@@ -22,7 +22,7 @@ let validarJWT = (req, res, next) => {
 };
 
 let validarAdminRole = (req, res, next) => {
-    console.log(req.usuario);
+    
     let role = req.usuario.role;
     if (role !== 'ADMIN_ROLE') {
         return res.status(401).json({

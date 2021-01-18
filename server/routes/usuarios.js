@@ -124,7 +124,7 @@ app.get('/usuario', validarJWT ,(req, res) => {
 //   });
   app.delete('/usuario/:id', [validarJWT, validarAdminRole], (req, res) => {
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'correo', 'img', 'role', 'estado']);
+    // let body = _.pick(req.body, ['nombre', 'correo', 'img', 'role', 'estado']);
     let estadoInhabilitado = { estado: false };
     Usuario.findByIdAndUpdate(id, estadoInhabilitado, {new: true}, (err, usuarioBorrado) => {
         

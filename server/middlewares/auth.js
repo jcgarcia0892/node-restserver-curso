@@ -17,7 +17,7 @@ let validarJWT = (req, res, next) => {
 
         req.usuario = decoded.usuario;
         next();
-    })
+    });
 
 };
 
@@ -35,8 +35,27 @@ let validarAdminRole = (req, res, next) => {
 
 }
 
+let validarTokenImg = (req, res, next) => {
+
+    const token = req.query.token;
+    jwt.verify(token, process.env.SEED, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                err: {
+                    message: 'token no válido'
+                }
+            });
+        }
+
+        req.usuario = decoded.usuario;
+        next();
+    });
+}
 
 module.exports = {
     validarJWT,
-    validarAdminRole
+    validarAdminRole,
+    validarTokenImg
 }
